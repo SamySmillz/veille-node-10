@@ -1,9 +1,14 @@
-const express = require('express'); 
+const express = require('express');
 const fs = require('fs');
 const util = require("util");
 const app = express();
+const http = require('http');
+
+const server = http.createServer(app);
+const io = require('./mes_modules/chat_socket').listen(server)
+
+
 const bodyParser= require('body-parser');
-// const server = require('http').createServer(app)
 const MongoClient = require('mongodb').MongoClient; // le pilote MongoDB
 const ObjectID = require('mongodb').ObjectID;
 app.use(bodyParser.urlencoded({extended: true}));
@@ -14,16 +19,16 @@ const i18n = require('i18n');
 const cookieParser = require('cookie-parser');
 app.use(cookieParser())
 app.use(express.static('public'));
- 
+
 i18n.configure({ 
    locales : ['fr', 'en'],
    cookie : 'langueChoisie', 
-   directory : __dirname + '/locales' })  
- 
+   directory : __dirname + '/locales' })
+
 
 /* Ajoute l'objet i18n à l'objet global «res» */
 app.use(i18n.init);
- 
+
 let db // variable qui contiendra le lien sur la BD
 
 MongoClient.connect('mongodb://127.0.0.1:27017', (err, database) => {
@@ -31,7 +36,7 @@ MongoClient.connect('mongodb://127.0.0.1:27017', (err, database) => {
  db = database.db('carnet_adresse')
 console.log('connexion à la BD')
 // lancement du serveur Express sur le port 8081
- app.listen(8081, (err) => {
+ server.listen(8081, (err) => {
  	if (err) console.log(err)
  console.log('connexion à la BD et on écoute sur le port 8081')
  })
@@ -179,6 +184,10 @@ console.log('route /ajax_ajouter')
  })
 })
 
+
+app.get('/chat', (req, res) =>{
+	res.render("socket_vue.ejs");
+})
 
 
 

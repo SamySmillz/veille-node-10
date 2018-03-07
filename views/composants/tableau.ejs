@@ -37,7 +37,7 @@
 </table>
 
 <!-- Dans notre fichier .ejs -->
-<button id='testAJAX'>test AJAX</button>
+<button id='testAJAX'>AJAX</button>
 
 <script type="text/javascript">
     // dans notre fichier .ejs
@@ -175,5 +175,15 @@
           xhr.addEventListener("readystatechange", traiterRequest, false);
         })
     }
+     function traiterRequest(e) {
+            console.log("xhr.readyState = " + xhr.readyState)
+            console.log("xhr.status = " + xhr.status)
+            if(xhr.readyState == 4 && xhr.status == 200) {
+                console.log('ajax fonctionne')
+                let  maReponse = JSON.parse(xhr.responseText);
+                console.log(xhr.responseText);
+                console.log(maReponse._id)
+            }
+        }
     }
 </script>
