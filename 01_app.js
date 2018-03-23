@@ -162,14 +162,19 @@ app.post('/ajax_modifier', (req, res) => {
 	 })
 })
 
-app.post('/ajax_detruire/', (req, res) => {
+app.post('/ajax_detruire', (req, res) => {
  console.log('route /detruire')
  // console.log('util = ' + util.inspect(req.params));	
+
+let monObj = req.body
+console.log(util.inspect("mon obj = " +monObj))
+
+
  db.collection('adresse')
  .findOneAndDelete({"_id": ObjectID(req.body._id)}, (err, resultat) => {
 
 if (err) return console.log(err)
- res.send(JSON.stringify(resultat))  // redirige vers la route qui affiche la collection
+ res.send(JSON.stringify(monObj))  // redirige vers la route qui affiche la collection
  })
 })
 
@@ -188,6 +193,3 @@ console.log('route /ajax_ajouter')
 app.get('/chat', (req, res) =>{
 	res.render("socket_vue.ejs");
 })
-
-
-
